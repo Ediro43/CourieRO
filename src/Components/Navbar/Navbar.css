@@ -1,0 +1,18 @@
+.myNavbar{
+    height:56px;
+    width: 100%;
+}
+
+.navbarColor{
+    background-image: linear-gradient(to left, #6C63FF , #43418E);;
+}
+
+.navbarLinks{
+    color: white;
+    font-size:20px;
+}
+
+.btnMargin{
+    margin-left: 10px;
+    margin-right: 10px;
+}
