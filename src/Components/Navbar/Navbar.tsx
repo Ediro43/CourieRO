@@ -1,8 +1,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { useHistory } from "react-router-dom";
 import React from 'react';
 import './Navbar.css';
 
 function Navbar(){
+
+  const history = useHistory();
+
+  const changeToLogin = () => {
+    let path = 'login';
+    history.push(path);
+  }
+
     return(
         <div className="myNavbar">
             <div>
@@ -17,9 +26,10 @@ function Navbar(){
             
           </ul>
           <form className="d-flex">
-            <a className="nav-link active navbarLinks" aria-current="page" href="/sala">Your package</a>
-            <a className="nav-link active navbarLinks" aria-current="page" href="/lala">Contact us</a>
-            <button type="button" className="btnMargin btn btn-primary">Sign in</button>
+            <a className="nav-link active navbarLinks" aria-current="page" href="/packages">Your package</a>
+            <a className="nav-link active navbarLinks" aria-current="page" href="/aboutus">About us</a>
+            <a className="nav-link active navbarLinks" aria-current="page" href="/contactus">Contact us</a>
+            <button type="button" className="btnMargin btn btn-outline-light fontclass" onClick={changeToLogin} >Login</button>
           </form>
           </div>
         </div>

@@ -2,11 +2,33 @@ import './App.css';
 import React from 'react';
 import Navbar from './Components/Navbar/Navbar';
 import WelcomePage from './Components/WelcomePage/WelcomePage';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useHistory,
+  BrowserRouter
+} from "react-router-dom";
+import AboutUs from './Components/AboutUs/AboutUs';
+import Login from './Components/Login/Login';
+import ContactUs from './Components/ContactUs/ContactUs';
+import Packages from './Components/Packages/Packages';
 
 
 
 
 function App() {
+
+  const history = useHistory();
+
+  // function changeRouteToLogin(){
+  //   history.push("/login");
+  // }
+
+  
+
+
   return (
     // <div classNameName="App">
     //   <header classNameName="App-header">
@@ -24,10 +46,31 @@ function App() {
     //     </a>
     //   </header>
     // </div>
-    <div className="fill-window">
-      <Navbar/>
-      <WelcomePage/>
-    </div>
+
+
+      <Router >
+        <Navbar/>
+        <div className="fill-window">
+          <Switch>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/aboutus">
+              <AboutUs />
+            </Route>
+            <Route path="/contactus">
+              <ContactUs />
+            </Route>
+            <Route path="/packages">
+              <Packages />
+            </Route>
+            <Route path="/">
+              <WelcomePage />
+            </Route>
+          </Switch>
+        </div>
+    </Router>
+
   );
 }
 

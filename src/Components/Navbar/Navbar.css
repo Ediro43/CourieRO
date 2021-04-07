@@ -1,10 +1,12 @@
 .myNavbar{
-    height:56px;
+    height:60px;
     width: 100%;
 }
 
 .navbarColor{
-    background-image: linear-gradient(to left, #6C63FF , #43418E);;
+    background-image: linear-gradient(to left, #6C63FF , #43418E);
+    /* border-bottom: 1px solid #efa912; */
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 6px 16px;
 }
 
 .navbarLinks{
@@ -15,4 +17,11 @@
 .btnMargin{
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.fontclass{
+    margin-left: 80px;
+    margin-right: 20px;
+    font-size: 20px ! important;
+    font-weight: bold ! important;
 }

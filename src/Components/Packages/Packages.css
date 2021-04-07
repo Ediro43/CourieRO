@@ -1,0 +1,32 @@
+.packagesPage{
+    width: 100%;
+    height: 100%;
+    background-color: #6C63FF;
+    padding: 0;
+    margin: 0;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    /* flex-wrap: wrap; */
+    
+}
+
+.topPart{
+    width: 100%;
+    height: 20%;
+    background-color: white;
+}
+
+.renderedItems{
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 80%;
+    width: 70%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

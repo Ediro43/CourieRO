@@ -1,0 +1,86 @@
+.contactUsPage{
+    width: 100%;
+    height: 100%;
+    background-color: #6C63FF;
+    padding: 0;
+    margin: 0;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    /* flex-wrap: wrap; */
+}
+
+.message{
+    height:35%;
+    width:100%;
+    background-color: white;
+    padding: 0;
+    margin: 0;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column; 
+    flex-wrap: wrap;
+    background-image: url("background.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+
+.textDiv {
+    background-color: white;
+    width: 50%;
+    padding: 15px;
+    border-radius: 16px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+#contactUsTitle{
+    width: 100%;
+    text-align: center;
+}
+
+#contactUsIndication{
+    width: 100%;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.creditentialsBox{
+    width: 50%;
+    height: 34rem;
+    padding: 40px;
+    background-color: white;
+    margin: auto;
+    border-radius: 16px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+#ctus{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#phoneNum{
+    margin-top: 4rem;
+    font-size:23px;
+}
+
+#emailAdd, #fax,#weekdays,#saturday,#sunday{
+    font-size: 23px;
+}
+
+#schedule{
+    margin-top: 3rem;
+    font-weight: 23px;
+    font-weight: bold;
+}
