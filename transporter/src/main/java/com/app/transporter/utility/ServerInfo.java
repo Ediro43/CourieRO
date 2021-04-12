@@ -19,7 +19,7 @@ public class ServerInfo {
 		return "http://" + host + ":" + port;
 	}
 	
-	
+	//domain address + queries
 	public String getRequestLink(final String query) {
 		if (query.startsWith("/")) {
 			return getDomainAddress() + query;
