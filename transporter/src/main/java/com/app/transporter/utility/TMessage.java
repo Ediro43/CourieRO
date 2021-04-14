@@ -1,25 +1,25 @@
 package com.app.transporter.utility;
 
 public class TMessage {
-	
-	//Should be the domain + host
+
+	// http://Domain + host
 	public String fullAddress;
 
 	public String body;
 
-	public boolean updateNodes;
-	
+	public boolean updateStatus;
+
 	public TMessage() {
 		fullAddress = "";
 		body = "";
-		updateNodes = false;
+		updateStatus = false;
 	}
 
-	public TMessage(String fullAddress, String body, boolean updateNodes) {
+	public TMessage(String fullAddress, String body, boolean updateStatus) {
 		super();
 		this.fullAddress = fullAddress;
 		this.body = body;
-		this.updateNodes = updateNodes;
+		this.updateStatus = updateStatus;
 	}
-	
+
 }

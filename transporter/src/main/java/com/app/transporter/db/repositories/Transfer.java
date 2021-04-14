@@ -1,8 +1,14 @@
 package com.app.transporter.db.repositories;
 
-public interface Transfer<T> {
-	
-	String unmarshall(T t);
+import java.util.List;
 
-	T marshall(String s);
+public interface Transfer<T> {
+
+	public final static String EMPTY_JSON = "{ }";
+
+	String toJSON(T t);
+	
+	String listToJSON(List<? extends T> list);
+
+	T fromJSON(String s);
 }
