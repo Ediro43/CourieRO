@@ -26,7 +26,8 @@ function Navbar(){
             
           </ul>
           <form className="d-flex">
-            <a className="nav-link active navbarLinks" aria-current="page" href="/packages">Your package</a>
+            <a className="nav-link active navbarLinks" aria-current="page" href="/packages">All package</a>
+            <a className="nav-link active navbarLinks" aria-current="page" href="/addpackage">Add package</a>
             <a className="nav-link active navbarLinks" aria-current="page" href="/aboutus">About us</a>
             <a className="nav-link active navbarLinks" aria-current="page" href="/contactus">Contact us</a>
             <button type="button" className="btnMargin btn btn-outline-light fontclass" onClick={changeToLogin} >Login</button>

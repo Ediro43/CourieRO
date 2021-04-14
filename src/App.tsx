@@ -14,6 +14,7 @@ import AboutUs from './Components/AboutUs/AboutUs';
 import Login from './Components/Login/Login';
 import ContactUs from './Components/ContactUs/ContactUs';
 import Packages from './Components/Packages/Packages';
+import AddPackage from './Components/AddPackage/AddPackage';
 
 
 
@@ -63,6 +64,9 @@ function App() {
             </Route>
             <Route path="/packages">
               <Packages />
+            </Route>
+            <Route path="/addpackage">
+              <AddPackage/>
             </Route>
             <Route path="/">
               <WelcomePage />
