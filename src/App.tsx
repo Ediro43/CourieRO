@@ -15,6 +15,7 @@ import Login from './Components/Login/Login';
 import ContactUs from './Components/ContactUs/ContactUs';
 import Packages from './Components/Packages/Packages';
 import AddPackage from './Components/AddPackage/AddPackage';
+import Footer from './Components/Footer/Footer';
 
 
 
@@ -73,9 +74,7 @@ function App() {
             </Route>
           </Switch>
         </div>
-        <div className="bottomDiv">
-          ssssaa
-        </div>
+        <Footer/>
     </Router>
 
   );

@@ -43,14 +43,17 @@ export const useServices = () => {
       }
     }
 
-    async function deletePackage(packageId: number){
+    async function deletePackage(packageId: number, refreshListFunc: any, goodfunc: any, badfunc: any){
         axios.delete(
           baseURL + "/" + packageId
         )
         .then((response) => {
           console.log(response);
+          goodfunc();
+          refreshListFunc();
         }, (error) => {
           console.log(error);
+          badfunc();
         });
       
     }

@@ -30,7 +30,7 @@
 }
 
 .packageTitle{
-    width: 55%;
+    width: 62%;
     border-radius: 10px;
     line-height: 80px;
     padding-left: 10px;
@@ -39,7 +39,7 @@
 }
 
 .buttonEdit {
-    width: 3%;
+    width: 1.5%;
     margin-left: 10px;
     /* background-color: lightblue; */
     border-color: none;
@@ -47,7 +47,7 @@
 }
 
 .buttonDelete {
-    width: 3%;
+    width: 1.5%;
     margin-left: 50px;
     /* background-color: lightblue; */
     border-color: none;

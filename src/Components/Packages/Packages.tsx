@@ -9,6 +9,8 @@ import ListItem from '../ListItem/ListItem';
 import './Packages.css'
 import edit from '../../Assets/edit.svg';
 import del from '../../Assets/delete.svg';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import { useServices } from '../../Services/useServices';
 
 interface Package{
@@ -23,9 +25,38 @@ function Packages(){
     const { getPackages, deletePackage } = useServices();
     const [myPackages, setMyPackages] = useState<Package[]>([]);
 
+    function successfulyDeleted(){
+        toast.success('Successfuly deleted package!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    function errorDeleting(){
+        toast.error('Something wrong happened when deleting an item', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    function refreshList(){
+        console.log("list refreshed");
+        getPackages(setMyPackages);
+    }
+
     function deleteItem(id: number){
         console.log("Delete item number: "+ id)
-        deletePackage(id);
+        deletePackage(id,refreshList,successfulyDeleted,errorDeleting);
     }
 
     function renderItems(){
@@ -56,6 +87,7 @@ function Packages(){
     
     return (
         <div className="packagesPage">
+            <ToastContainer />
             <h1 id="packagesWelcome"><b>Welcome Admin</b></h1>
             <h4 id="packagesDesc">Here you can see all the availible packages, edit or delete them</h4>
             <ListHeader/>

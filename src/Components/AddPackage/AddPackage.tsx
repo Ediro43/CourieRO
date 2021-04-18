@@ -18,8 +18,6 @@ function AddPackage(){
     const defaultOption = options[0];
 
     const { postPackage } = useServices();
-    
-    const notify = () => toast("Wow so easy!");
 
     function handleTitleChange(e: any) {
         console.log(e.target.value);
@@ -84,7 +82,7 @@ function AddPackage(){
                 {/* <input id="packageCourierInput" type="text" placeholder="Courier"  onChange={handleCourierChange}></input> */}
                 <div id="packageCourierInput">
                 <Dropdown
-                    placeholder="Select an option"
+                    placeholder="Select a courier"
                     options={options}
                     // value={options[0]}
                     onChange={(value) => dropDownValueChanges(value.value)}
