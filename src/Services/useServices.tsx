@@ -4,6 +4,7 @@ import React from 'react';
 export interface UseServices{
     readonly getPackages: () => AxiosResponse<any>;
     readonly postPackage: (packageTitle: string,courierName: string) => void;
+    readonly deletePackage: (packageId: number) => void;
     prevState: null;
 }
 
@@ -22,7 +23,8 @@ export const useServices = () => {
       return rzt;
     }
 
-    async function postPackage(packageTitle: string,courierName: string){
+    async function postPackage(packageTitle: string,courierName: string,goodfunc: any,noparamsfunc:any, badfunc: any){
+      if(packageTitle !== "" && courierName !== ""){
         axios.post(baseURL+"/", {
             "courier_name": courierName,
             "packageTitle": packageTitle,
@@ -30,14 +32,33 @@ export const useServices = () => {
           })
           .then((response) => {
             console.log(response);
+            goodfunc();
           }, (error) => {
             console.log(error);
+            badfunc();
           });
+        }
+      else{
+        noparamsfunc();
+      }
+    }
+
+    async function deletePackage(packageId: number){
+        axios.delete(
+          baseURL + "/" + packageId
+        )
+        .then((response) => {
+          console.log(response);
+        }, (error) => {
+          console.log(error);
+        });
+      
     }
 
     return {
         getPackages,
         postPackage,
+        deletePackage,
     };
 }
 

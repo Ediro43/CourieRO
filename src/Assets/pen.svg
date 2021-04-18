@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="39px" height="46px" viewBox="0 0 39 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>pen</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-4.000000, 0.000000)">
+            <g id="pen" transform="translate(1.000000, -2.000000)">
+                <polygon id="Triangle" stroke="#979797" transform="translate(7.032332, 43.032332) rotate(-141.000000) translate(-7.032332, -43.032332) " points="7.03233176 38.0323318 12.0323318 48.0323318 2.03233176 48.0323318"></polygon>
+                <path d="M19.1932642,-0.66125621 L31.1932642,-0.66125621 L31.1932642,38.3387438 C31.1932642,40.5478828 29.4024032,42.3387438 27.1932642,42.3387438 L23.1932642,42.3387438 C20.9841252,42.3387438 19.1932642,40.5478828 19.1932642,38.3387438 L19.1932642,-0.66125621 Z" id="Rectangle" fill="#979797" transform="translate(25.193264, 20.838744) rotate(-141.000000) translate(-25.193264, -20.838744) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

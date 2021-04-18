@@ -4,8 +4,11 @@ import { AxiosResponse } from 'axios';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useServices } from '../../Services/useServices';
+import ListHeader from '../ListHeader/ListHeader';
 import ListItem from '../ListItem/ListItem';
 import './Packages.css'
+import edit from '../../Assets/edit.svg';
+import del from '../../Assets/delete.svg';
 // import { useServices } from '../../Services/useServices';
 
 interface Package{
@@ -17,8 +20,13 @@ interface Package{
 
 function Packages(){
 
-    const { getPackages } = useServices();
+    const { getPackages, deletePackage } = useServices();
     const [myPackages, setMyPackages] = useState<Package[]>([]);
+
+    function deleteItem(id: number){
+        console.log("Delete item number: "+ id)
+        deletePackage(id);
+    }
 
     function renderItems(){
 
@@ -29,7 +37,7 @@ function Packages(){
 
         let renderedItems = myPackages.map((item, i) => {
             return (
-                <ListItem key={i} number={myPackages[i].id} courier_name={myPackages[i].courier_name} packageTitle={myPackages[i].packageTitle}/>
+                <ListItem key={i} number={myPackages[i].id} courier_name={myPackages[i].courier_name} packageTitle={myPackages[i].packageTitle} deleteFunction={deleteItem}/>
             )
         })
         return renderedItems
@@ -44,6 +52,8 @@ function Packages(){
         // setMyPackages(resp);
       },[]);
 
+    
+    
     return (
         <div className="packagesPage">
             {/* <ListItem/> */}
@@ -51,6 +61,7 @@ function Packages(){
                 Some message
             </div>
             <div className="renderedItems">
+                <ListHeader/>
                 {renderItems()}
             </div>
             
