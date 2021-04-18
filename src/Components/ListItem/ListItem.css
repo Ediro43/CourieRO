@@ -1,7 +1,7 @@
 .listItem{
     /* height: 80px; */
     min-height: 80px;
-    width: 100%;
+    width: 80%;
     background-color: white;
     border-radius: 10px;
     padding: 10px;
@@ -30,7 +30,7 @@
 }
 
 .packageTitle{
-    width: 53%;
+    width: 55%;
     border-radius: 10px;
     line-height: 80px;
     padding-left: 10px;
@@ -39,7 +39,7 @@
 }
 
 .buttonEdit {
-    width: 4%;
+    width: 3%;
     margin-left: 10px;
     /* background-color: lightblue; */
     border-color: none;
@@ -47,8 +47,8 @@
 }
 
 .buttonDelete {
-    width: 4%;
-    margin-left: 30px;
+    width: 3%;
+    margin-left: 50px;
     /* background-color: lightblue; */
     border-color: none;
     border-radius: 10px;

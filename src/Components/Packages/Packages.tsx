@@ -56,14 +56,18 @@ function Packages(){
     
     return (
         <div className="packagesPage">
+            <h1 id="packagesWelcome"><b>Welcome Admin</b></h1>
+            <h4 id="packagesDesc">Here you can see all the availible packages, edit or delete them</h4>
+            <ListHeader/>
+            {renderItems()}
             {/* <ListItem/> */}
-            <div className="topPart">
+            {/* <div className="topPart">
                 Some message
             </div>
             <div className="renderedItems">
                 <ListHeader/>
                 {renderItems()}
-            </div>
+            </div> */}
             
         </div>
     )

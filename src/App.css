@@ -41,8 +41,18 @@
 
 .fill-window {
   height: 100%;
-  position: absolute;
+  /* position: absolute; */
   left: 0;
   width: 100%;
-  overflow: hidden;
+  min-height:100vh;
+  /* overflow: auto; */
+}
+
+.bottomDiv{
+  /* position:absolute; */
+  height: 120px;
+  left:0;
+  bottom:0;
+  right:0;
+  background-color: #61dafb;
 }
