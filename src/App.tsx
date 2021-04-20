@@ -16,6 +16,7 @@ import ContactUs from './Components/ContactUs/ContactUs';
 import Packages from './Components/Packages/Packages';
 import AddPackage from './Components/AddPackage/AddPackage';
 import Footer from './Components/Footer/Footer';
+import EditPackage from './Components/EditPackage/EditPackage';
 
 
 
@@ -68,6 +69,10 @@ function App() {
             </Route>
             <Route path="/addpackage">
               <AddPackage/>
+            </Route>
+            <Route path="/editpackage">
+              <EditPackage/>
+              {/* component={EditPackage} */}
             </Route>
             <Route path="/">
               <WelcomePage />

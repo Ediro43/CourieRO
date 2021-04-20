@@ -4,7 +4,7 @@ import './Footer.css'
 function Footer(){
     return(
         <div className="bottomDiv">
-            Sala
+            A site made by <s>StrikeSoftware</s>
         </div>
     )
 }

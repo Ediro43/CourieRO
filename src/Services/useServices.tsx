@@ -1,10 +1,12 @@
 import axios, { AxiosResponse } from 'axios';
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 export interface UseServices{
     readonly getPackages: () => AxiosResponse<any>;
     readonly postPackage: (packageTitle: string,courierName: string) => void;
     readonly deletePackage: (packageId: number) => void;
+    readonly useQuery: () => URLSearchParams;
     prevState: null;
 }
 
@@ -58,10 +60,15 @@ export const useServices = () => {
       
     }
 
+    function useQuery() {
+      return new URLSearchParams(useLocation().search);
+    }
+
     return {
         getPackages,
         postPackage,
         deletePackage,
+        useQuery
     };
 }
 
