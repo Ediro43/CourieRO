@@ -7,15 +7,17 @@ export interface UseServices{
     readonly postPackage: (packageTitle: string,courierName: string) => void;
     readonly deletePackage: (packageId: number) => void;
     readonly useQuery: () => URLSearchParams;
+    readonly getCouriers: (func: any,createOptions:any) => AxiosResponse<any>;
     prevState: null;
 }
 
-const baseURL = "http://localhost:3000/packages";
+const packagesURL = "http://localhost:3000/packages";
+const couriersURL = "http://localhost:3000/couriers";
 
 export const useServices = () => {
     var resp: any;
     async function getPackages(func: any){
-        let rzt = axios.get(baseURL)
+        let rzt = axios.get(packagesURL)
             .then(res => {
                 resp = res.data;
                 console.log(resp)
@@ -25,12 +27,11 @@ export const useServices = () => {
       return rzt;
     }
 
-    async function postPackage(packageTitle: string,courierName: string,goodfunc: any,noparamsfunc:any, badfunc: any){
-      if(packageTitle !== "" && courierName !== ""){
-        axios.post(baseURL+"/", {
-            "courier_name": courierName,
+    async function postPackage(packageTitle: string,courierID: string,goodfunc: any,noparamsfunc:any, badfunc: any){
+      if(packageTitle !== "" && courierID !== ""){
+        axios.post(packagesURL+"/", {
+            "courier_id": courierID,
             "packageTitle": packageTitle,
-            "courier-id": "aaddds09"
           })
           .then((response) => {
             console.log(response);
@@ -47,7 +48,7 @@ export const useServices = () => {
 
     async function deletePackage(packageId: number, refreshListFunc: any, goodfunc: any, badfunc: any){
         axios.delete(
-          baseURL + "/" + packageId
+          packagesURL + "/" + packageId
         )
         .then((response) => {
           console.log(response);
@@ -64,11 +65,25 @@ export const useServices = () => {
       return new URLSearchParams(useLocation().search);
     }
 
+    function getCouriers(func: any,createOptions:any){
+        let rzt = axios.get(couriersURL)
+            .then(res => {
+              console.log("axios get couriers:"+res.data)
+                resp = res.data;
+                console.log(resp)
+                func(resp);
+                createOptions(resp);
+        })
+      
+      return rzt;
+    }
+
     return {
         getPackages,
         postPackage,
         deletePackage,
-        useQuery
+        useQuery,
+        getCouriers,
     };
 }
 

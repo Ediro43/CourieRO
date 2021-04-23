@@ -1,23 +1,50 @@
 import useServices from '../../Services/useServices';
 import './AddPackage.css';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dropdown, Selection } from 'react-dropdown-now';
 import 'react-dropdown-now/style.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
+interface Courier{
+    id: string;
+    courier_name: string;
+}
 
 function AddPackage(){
 
     const [title,setTitle] = useState("");
     const [dropdownValue,setDropdownValue] = useState("");
-    const options = [
-        'Edi', 'Victor', 'Cristi','Baba'
-      ];
-    const defaultOption = options[0];
+    // const options = [
+    //     'Edi', 'Victor', 'Cristi','Baba'
+    //   ];
+    // const defaultOption = options[0];
+    const [couriers,setCouriers] = useState<Courier[]>([]);
+    const [options,setOptions] = useState<string[]>([]);
 
-    const { postPackage } = useServices();
+    const { postPackage, getCouriers } = useServices();
+
+    useEffect(() => {
+        // Update the document title using the browser API
+        console.log("couriers:")
+        getCouriers(setCouriers,createOptions);
+        // console.log("resp" + resp);
+        // setMyPackages(resp);
+        // console.log("couriers are:"+couriers)
+        // createOptions(couriers)
+      },[]);
+
+    function createOptions(courierArray: Courier[]){
+        console.log("createOptions")
+        let opt = courierArray.map((item, i) => {
+            console.log("i"+item.courier_name);
+                return item.courier_name;
+            }
+        );
+        setOptions(opt);
+    }
+
+
 
     function handleTitleChange(e: any) {
         console.log(e.target.value);
@@ -69,7 +96,18 @@ function AddPackage(){
 
     function addPackageToDatabase(){
         console.log(title+dropdownValue);
-        postPackage(title,dropdownValue,showGoodAlert,showNoParamsAlert,showBadAlert)
+        let wantedCourierId = "-1";
+        let wantedCourierName = dropdownValue;
+        for(var i=0; i< couriers.length; i++ ){
+            if(couriers[i].courier_name === wantedCourierName){
+                console.log("exist");
+                wantedCourierId = couriers[i].id;
+                break;
+            }else{
+                console.log("not exist")
+            }
+        }
+        postPackage(title,wantedCourierId,showGoodAlert,showNoParamsAlert,showBadAlert)
     }
 
 

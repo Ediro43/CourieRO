@@ -11,6 +11,7 @@ import edit from '../../Assets/edit.svg';
 import del from '../../Assets/delete.svg';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Spacer from '../Spacer/Spacer';
 // import { useServices } from '../../Services/useServices';
 
 interface Package{
@@ -61,16 +62,17 @@ function Packages(){
 
     function renderItems(){
 
-        
-        const numberOfItems = [
-            1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
-        ]
-
         let renderedItems = myPackages.map((item, i) => {
             return (
-                <ListItem key={i} number={myPackages[i].id} courier_name={myPackages[i].courier_name} packageTitle={myPackages[i].packageTitle} deleteFunction={deleteItem}/>
+                <ListItem key={i} number={i+1} courier_name={myPackages[i].courier_name} packageTitle={myPackages[i].packageTitle} packageId = {myPackages[i].id} courierId = {myPackages[i].courier_id}deleteFunction={deleteItem}/>
             )
         })
+
+        if(renderedItems.length > 0){
+            renderedItems.push(
+                <Spacer key="aaa"/>
+            )
+        }
         return renderedItems
 
     }

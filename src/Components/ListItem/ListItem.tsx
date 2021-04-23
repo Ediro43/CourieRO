@@ -12,6 +12,9 @@ function ListItem(props: any){
         props.deleteFunction(props.number)
     }
 
+    console.log("Item courier id:" + props.courierId);
+    console.log("Item package id:" + props.packageId);
+
 
     const changeToEditPackage = () => {
         let path = 'editpackage/' ;
