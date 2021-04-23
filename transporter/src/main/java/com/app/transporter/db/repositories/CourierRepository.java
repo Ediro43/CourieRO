@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.dalesbred.Database;
 
 import com.app.transporter.db.entities.Courier;
-import com.app.transporter.db.entities.Package;
 
 import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.model.HttpEntity;
@@ -41,14 +40,16 @@ public class CourierRepository extends Repository<Courier> {
 
 	@Override
 	public String save(Courier courier) {
-		getDataBase().update("insert into courier (name, password) values (?, ?)", courier.name, courier.password);
+		getDataBase().update("insert into courier (name, password, role) values (?, ?, ?)", courier.name, courier.password, courier.role);
 		return "Succes";
 	}
-
+	
+	
+	//Used for sync. DBs
 	@Override
 	void insertAll(List<Courier> couriers) {
 		for (var courier : couriers) {
-			getDataBase().update("insert into courier (id, name, password) values (?, ?, ?)",courier.id, courier.name, courier.password);
+			getDataBase().update("insert ignore into courier (id, name, password, role) values (?, ?, ?, ?)",courier.id, courier.name, courier.password, courier.role);
 		}
 	}
 

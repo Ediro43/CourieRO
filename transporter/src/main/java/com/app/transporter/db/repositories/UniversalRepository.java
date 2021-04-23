@@ -61,7 +61,7 @@ public class UniversalRepository {
 					var tableData = entity.getValue();
 					var repository = repositories.stream()
 							.filter(it -> it.getEntityName().equals(tableName))
-							.findFirst().get(); //TODO: ifPresent maybe
+							.findFirst().get();
 					repository.pushAllData(tableData);
 					
 				}
