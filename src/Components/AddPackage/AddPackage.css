@@ -48,6 +48,22 @@
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
+#packageEmail{
+    width: 80%;
+    margin-top: 1rem;
+    margin-left: 10%;
+    margin-right: 10%;
+    border:none;
+    border-top: 2px solid #43418E;
+    border-bottom: 2px solid #43418E;
+    border-left: 2px solid #43418E;
+    border-right: 2px solid #43418E;
+    border-radius: 6px;
+    font-size: 16px;
+    padding: 8px 10px 8px 10px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
 #packageCourierInput{
     width: 80%;
     margin-top: 1rem;

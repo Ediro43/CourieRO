@@ -27,11 +27,12 @@ export const useServices = () => {
       return rzt;
     }
 
-    async function postPackage(packageTitle: string,courierID: string,goodfunc: any,noparamsfunc:any, badfunc: any){
+    async function postPackage(packageTitle: string,courierID: string,email: string,goodfunc: any,noparamsfunc:any, badfunc: any){
       if(packageTitle !== "" && courierID !== ""){
         axios.post(packagesURL+"/", {
             "courier_id": courierID,
             "packageTitle": packageTitle,
+            "email": email
           })
           .then((response) => {
             console.log(response);

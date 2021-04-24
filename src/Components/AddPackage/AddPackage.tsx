@@ -14,6 +14,7 @@ interface Courier{
 function AddPackage(){
 
     const [title,setTitle] = useState("");
+    const [email,setEmail] = useState("");
     const [dropdownValue,setDropdownValue] = useState("");
     // const options = [
     //     'Edi', 'Victor', 'Cristi','Baba'
@@ -49,6 +50,11 @@ function AddPackage(){
     function handleTitleChange(e: any) {
         console.log(e.target.value);
         setTitle(e.target.value);
+    }
+
+    function handleEmailChange(e: any) {
+        console.log(e.target.value);
+        setEmail(e.target.value);
     }
 
     function dropDownValueChanges(value: any){
@@ -107,7 +113,7 @@ function AddPackage(){
                 console.log("not exist")
             }
         }
-        postPackage(title,wantedCourierId,showGoodAlert,showNoParamsAlert,showBadAlert)
+        postPackage(title,wantedCourierId,email,showGoodAlert,showNoParamsAlert,showBadAlert)
     }
 
 
@@ -117,6 +123,7 @@ function AddPackage(){
             <div className="packageDetailsBox">
                 <h2 id="pageTitle">Enter package details:</h2>
                 <input id="packageTitleInput" type="text" placeholder="Package Title" onChange={handleTitleChange}></input>
+                <input id="packageEmail" type="text" placeholder="Receiver e-mail" onChange={handleEmailChange}></input>
                 {/* <input id="packageCourierInput" type="text" placeholder="Courier"  onChange={handleCourierChange}></input> */}
                 <div id="packageCourierInput">
                 <Dropdown

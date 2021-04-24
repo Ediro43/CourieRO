@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useServices from '../../Services/useServices';
 import { Dropdown, Selection } from 'react-dropdown-now';
 import 'react-dropdown-now/style.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+interface Courier{
+    id: string;
+    courier_name: string;
+}
 
 function EditPackage(){
 
@@ -27,16 +32,20 @@ function EditPackage(){
 
         const [title,setTitle] = useState("");
         const [dropdownValue,setDropdownValue] = useState("");
-        const options = [
-            'Edi', 'Victor', 'Cristi','Baba'
-          ];
-        const defaultOption = options[0];
-    
-        const { postPackage } = useServices();
+        const [email,setEmail] = useState("");
+        const [couriers,setCouriers] = useState<Courier[]>([]);
+        const [options,setOptions] = useState<string[]>([]);
+
+        const { postPackage, getCouriers } = useServices();
     
         function handleTitleChange(e: any) {
             console.log(e.target.value);
             setTitle(e.target.value);
+        }
+
+        function handleEmailChange(e: any) {
+            console.log(e.target.value);
+            setEmail(e.target.value);
         }
     
         function dropDownValueChanges(value: any){
@@ -83,9 +92,29 @@ function EditPackage(){
         }
     
         function addPackageToDatabase(){
-            console.log(title+dropdownValue);
-            postPackage(title,dropdownValue,showGoodAlert,showNoParamsAlert,showBadAlert)
+            console.log(title+dropdownValue+email);
+            // postPackage(title,dropdownValue,showGoodAlert,showNoParamsAlert,showBadAlert)
         }
+
+        function createOptions(courierArray: Courier[]){
+            console.log("createOptions")
+            let opt = courierArray.map((item, i) => {
+                console.log("i"+item.courier_name);
+                    return item.courier_name;
+                }
+            );
+            setOptions(opt);
+        }
+
+        useEffect(() => {
+            // Update the document title using the browser API
+            console.log("couriers:")
+            getCouriers(setCouriers,createOptions);
+            // console.log("resp" + resp);
+            // setMyPackages(resp);
+            // console.log("couriers are:"+couriers)
+            // createOptions(couriers)
+          },[]);
         
     return(
         <div className="addPackagesPage">
@@ -93,6 +122,7 @@ function EditPackage(){
             <div className="packageDetailsBox">
                 <h2 id="pageTitle">Edit package details:</h2>
                 <input id="packageTitleInput" type="text" placeholder={packageName} onChange={handleTitleChange} ></input>
+                <input id="packageEmail" type="text" placeholder="Receiver e-mail" onChange={handleEmailChange}></input>
                 {/* <input id="packageCourierInput" type="text" placeholder="Courier"  onChange={handleCourierChange}></input> */}
                 <div id="packageCourierInput">
                 <Dropdown
