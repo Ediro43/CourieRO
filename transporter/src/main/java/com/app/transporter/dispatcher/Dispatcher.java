@@ -77,7 +77,7 @@ public class Dispatcher extends AllDirectives {
 				return null;
 			}
 
-			//Basic requests
+			//Copy request from the original with the new server address
 			final ServerInfo closestServer = getNearestServer();
 			final String link = closestServer.getRequestLink(queryPath);
 			HttpRequest requestToServer = HttpRequest.create(link)
@@ -144,7 +144,7 @@ public class Dispatcher extends AllDirectives {
 						.filter(svr -> !svr.compareServerInfo(closestServer))
 						.collect(toList());
 				
-				//create PUT requests for the servers - alternatively POST ca be used
+				//create PUT requests for the servers - alternatively POST can be used
 				for (var server : restOfServers) {
 					String queryPath = oldRequest.getUri().getPathString();
 					String link = server.getRequestLink(queryPath);
@@ -160,6 +160,7 @@ public class Dispatcher extends AllDirectives {
 	//TODO: cache maybe the client and also the location
 	//TODO: this is wrong for not just extract the first server
 	//TODO: create a method or something some formula ffs my life
+	//TODO: check here the request for longitude and latitude ' ' '
 	private ServerInfo getNearestServer() {
 		return availableServers.values().stream().findFirst().get();
 	}
@@ -174,6 +175,20 @@ public class Dispatcher extends AllDirectives {
 			Long latitude = Long.parseLong(query.getOrElse("latitude", "0"));
 			ServerInfo server = new ServerInfo(host, port, longitude, latitude);
 			availableServers.put(address, server);
+		}
+	}
+	
+	private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
+		if ((lat1 == lat2) && (lon1 == lon2)) {
+			return 0;
+		} else {
+			double theta = lon1 - lon2;
+			double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2))
+					+ Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
+			dist = Math.acos(dist);
+			dist = Math.toDegrees(dist);
+			dist = dist * 60 * 1.1515;
+			return dist = dist * 1.609344;
 		}
 	}
 

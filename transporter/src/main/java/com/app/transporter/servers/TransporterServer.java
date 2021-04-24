@@ -114,8 +114,8 @@ public class TransporterServer extends AllDirectives {
 	};
 
 	private Supplier<Route> getCourierByID = () -> parameter(StringUnmarshallers.INTEGER, "id", id -> {
-		var pack = courierRepo.searchById(id).get();
-		TMessage message = new TMessage(serverInfo.getDomainAddress(), courierRepo.toJSON(pack), false);
+		var courier = courierRepo.searchById(id).get();
+		TMessage message = new TMessage(serverInfo.getDomainAddress(), courierRepo.toJSON(courier), false);
 		return complete(StatusCodes.OK, message, Jackson.marshaller());
 	});
 	
@@ -130,7 +130,7 @@ public class TransporterServer extends AllDirectives {
 	}
 	
 	private Supplier<Route> getPackages = () -> {
-		String packages = packageRepo.extractAllRowsToJSON();
+		String packages = packageRepo.getCustomInfoAboutPackages();
 		TMessage tm = new TMessage(serverInfo.getDomainAddress(), packages, false);
 		return complete(StatusCodes.OK, tm, Jackson.<TMessage>marshaller());
 	};
