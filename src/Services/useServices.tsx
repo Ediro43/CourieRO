@@ -11,8 +11,20 @@ export interface UseServices{
     prevState: null;
 }
 
-const packagesURL = "http://localhost:3000/packages";
-const couriersURL = "http://localhost:3000/couriers";
+// const packagesURL = "http://localhost:3000/packages";
+// const base = "http://aa7212262192.ngrok.io/"
+const base = "http://localhost:3000/";
+const packagesURL = base + "packages";
+const couriersURL = base + "couriers";
+
+const headers = {
+  'Content-Type': 'text/plain'
+};
+
+const hdr = {
+  headers: {"Access-Control-Allow-Origin": "*"}
+}
+
 
 export const useServices = () => {
     var resp: any;
@@ -27,21 +39,50 @@ export const useServices = () => {
       return rzt;
     }
 
-    async function postPackage(packageTitle: string,courierID: string,email: string,goodfunc: any,noparamsfunc:any, badfunc: any){
-      if(packageTitle !== "" && courierID !== ""){
-        axios.post(packagesURL+"/", {
-            "courier_id": courierID,
-            "packageTitle": packageTitle,
-            "email": email
-          })
+    async function postPackage(packageTitle: string,courierID: number,email: string,goodfunc: any,noparamsfunc:any, badfunc: any){
+      if(packageTitle !== "" && courierID !== -1){
+        axios.post(packagesURL, null,  {params: {
+            "cid": courierID,
+            "title": packageTitle,
+            "email": email,
+            "state": "pending"
+          }})
           .then((response) => {
             console.log(response);
             goodfunc();
           }, (error) => {
             console.log(error);
             badfunc();
-          });
-        }
+          });}
+      //   const requestOptions = {
+      //     mode: 'no-cors',
+      //     method: 'POST',
+      //     headers: { 'Content-Type': 'application/json' },
+      //     body: JSON.stringify(
+      //       {
+      //             "cid": 1,
+      //             "title": "hardcoded title",
+      //             "email": "e@yahoo.com",
+      //             "state": "pending"
+      //           }
+      //       )
+      // };
+      // fetch(packagesURL, {
+      //       mode: 'no-cors',
+      //       method: "post",
+      //       headers: {
+      //            "Content-Type": "application/json"
+      //       },
+      //       body: JSON.stringify(
+      //         {
+      //           "id": 25,
+      //           "cid": 1,
+      //           "title": "hardcoded title",
+      //           "email": "e@yahoo.com",
+      //           "state": "pending"
+      //         }
+      //       )
+      //     })}
       else{
         noparamsfunc();
       }

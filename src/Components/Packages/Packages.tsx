@@ -16,9 +16,11 @@ import Spacer from '../Spacer/Spacer';
 
 interface Package{
     id: number;
-    packageTitle: string;
+    title: string;
     courier_name: string;
-    courier_id: string;
+    courier_id: number;
+    email: string;
+    state: string;
 }
 
 function Packages(){
@@ -64,7 +66,16 @@ function Packages(){
 
         let renderedItems = myPackages.map((item, i) => {
             return (
-                <ListItem key={i} number={i+1} courier_name={myPackages[i].courier_name} packageTitle={myPackages[i].packageTitle} packageId = {myPackages[i].id} courierId = {myPackages[i].courier_id}deleteFunction={deleteItem}/>
+                <ListItem 
+                key={i} 
+                number={i+1}
+                packageId = {myPackages[i].id}  
+                courierId = {myPackages[i].courier_id} 
+                courier_name={myPackages[i].courier_name} 
+                packageTitle={myPackages[i].title} 
+                state={myPackages[i].state } 
+                email={myPackages[i].email} 
+                deleteFunction={deleteItem}/>
             )
         })
 

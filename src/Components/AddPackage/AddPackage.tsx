@@ -7,8 +7,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface Courier{
-    id: string;
-    courier_name: string;
+    id: number;
+    name: string;
 }
 
 function AddPackage(){
@@ -38,8 +38,8 @@ function AddPackage(){
     function createOptions(courierArray: Courier[]){
         console.log("createOptions")
         let opt = courierArray.map((item, i) => {
-            console.log("i"+item.courier_name);
-                return item.courier_name;
+            console.log("i"+item.name);
+                return item.name;
             }
         );
         setOptions(opt);
@@ -102,10 +102,10 @@ function AddPackage(){
 
     function addPackageToDatabase(){
         console.log(title+dropdownValue);
-        let wantedCourierId = "-1";
+        let wantedCourierId = -1;
         let wantedCourierName = dropdownValue;
         for(var i=0; i< couriers.length; i++ ){
-            if(couriers[i].courier_name === wantedCourierName){
+            if(couriers[i].name === wantedCourierName){
                 console.log("exist");
                 wantedCourierId = couriers[i].id;
                 break;

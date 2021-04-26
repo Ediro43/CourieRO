@@ -1,100 +1,46 @@
 {
   "packages": [
     {
-      "courier_name": "Edi",
-      "packageTitle": "Package 6",
-      "courier-id": "aaddds09",
-      "id": 6
+      "id": 1,
+      "title": "package 1",
+      "state": "pending",
+      "email": "email@yahoo.com",
+      "courier_id": 0,
+      "courier_name": "edi"
     },
     {
-      "courier_name": "Edi",
-      "packageTitle": "Package 7",
-      "courier-id": "aaddds09",
-      "id": 7
+      "id": 2,
+      "title": "package 2",
+      "state": "pending",
+      "email": "ddd@yahoo.com",
+      "courier_id": 1,
+      "courier_name": "Victor"
     },
     {
-      "courier_name": "Edi",
-      "packageTitle": "Package 8",
-      "courier-id": "aaddds09",
-      "id": 8
-    },
-    {
-      "courier_name": "Edi",
-      "packageTitle": "Package 9",
-      "courier-id": "aaddds09",
-      "id": 9
-    },
-    {
-      "courier_name": "Edi",
-      "packageTitle": "Package 10",
-      "courier-id": "aaddds09",
-      "id": 10
-    },
-    {
-      "courier_name": "Baba",
-      "packageTitle": "Title",
-      "courier-id": "aaddds09",
-      "id": 11
-    },
-    {
-      "courier_name": "Edi",
-      "packageTitle": "da da",
-      "courier-id": "aaddds09",
-      "id": 12
-    },
-    {
-      "courier_name": "Victor",
-      "packageTitle": "daaaa",
-      "courier-id": "aaddds09",
-      "id": 13
-    },
-    {
-      "courier_id": "Victor",
-      "packageTitle": "daaaaha",
-      "id": 14
-    },
-    {
-      "courier_id": "1",
-      "packageTitle": "daaaaha",
-      "id": 15
-    },
-    {
-      "courier_id": "0",
-      "packageTitle": "test1",
-      "id": 16
-    },
-    {
-      "courier_id": "0",
-      "packageTitle": "test1",
-      "id": 17
-    },
-    {
-      "courier_id": "2",
-      "packageTitle": "test2",
-      "id": 18
-    },
-    {
-      "courier_id": "3",
-      "packageTitle": "test3",
-      "id": 19
+      "id": 3,
+      "title": "package 3",
+      "state": "pending",
+      "email": "eee@yahoo.com",
+      "courier_id": 2,
+      "courier_name": "Cristi"
     }
   ],
   "couriers": [
     {
       "id": "0",
-      "courier_name": "Edi"
+      "name": "Edi"
     },
     {
       "id": "1",
-      "courier_name": "Victor"
+      "name": "Victor"
     },
     {
       "id": "2",
-      "courier_name": "Cristi"
+      "name": "Cristi"
     },
     {
       "id": "3",
-      "courier_name": "Baba"
+      "name": "Baba"
     }
   ]
 }

@@ -9,7 +9,7 @@ function ListItem(props: any){
     const history = useHistory();
 
     function deleteItem(){
-        props.deleteFunction(props.number)
+        props.deleteFunction(props.packageId)
     }
 
     console.log("Item courier id:" + props.courierId);
@@ -18,7 +18,7 @@ function ListItem(props: any){
 
     const changeToEditPackage = () => {
         let path = 'editpackage/' ;
-        history.push(path + '?courier=' + props.courier_name +"&title="+props.packageTitle);
+        history.push(path + '?courier=' + props.courier_name +"&title="+props.packageTitle+"&email="+props.email);
         // history.push(
         //     {
         //         pathname: '/editpackage',
@@ -40,6 +40,12 @@ function ListItem(props: any){
             </div>
             <div className="packageTitle">
                 <span className="courierSpanTitle">{props.packageTitle}</span>
+            </div>
+            <div className="packageEmail">
+                <span className="packageSpanEmail">{props.email}</span>
+            </div>
+            <div className="packageState">
+                <span className="packageSpanState">{props.state}</span>
             </div>
             <input className="buttonEdit" alt="" type="image" src={edit} onClick={changeToEditPackage} />
             <input className="buttonDelete" alt="" type="image" src={del} onClick={deleteItem} />

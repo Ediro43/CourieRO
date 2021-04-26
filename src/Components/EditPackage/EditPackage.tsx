@@ -6,8 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface Courier{
-    id: string;
-    courier_name: string;
+    id: number;
+    name: string;
 }
 
 function EditPackage(){
@@ -17,10 +17,13 @@ function EditPackage(){
     let query = useQuery();
 
     let courier = query.get("courier");
-    let courierName: string = courier ? courier : "";
+    let packageCourierName: string = courier ? courier : "";
 
     let mypackage = query.get("title");
-    let packageName: string = mypackage ? mypackage : "";
+    let packageTitle: string = mypackage ? mypackage : "";
+
+    let myemail = query.get("email");
+    let packageEmail: string = myemail ? myemail : "";
 
     console.log("from url" + query.get("query"));
 
@@ -35,6 +38,8 @@ function EditPackage(){
         const [email,setEmail] = useState("");
         const [couriers,setCouriers] = useState<Courier[]>([]);
         const [options,setOptions] = useState<string[]>([]);
+
+        
 
         const { postPackage, getCouriers } = useServices();
     
@@ -92,15 +97,29 @@ function EditPackage(){
         }
     
         function addPackageToDatabase(){
-            console.log(title+dropdownValue+email);
+            
             // postPackage(title,dropdownValue,showGoodAlert,showNoParamsAlert,showBadAlert)
+            let wantedCourierId = -1;
+            let wantedCourierName = dropdownValue;
+            for(var i=0; i< couriers.length; i++ ){
+                if(couriers[i].name === wantedCourierName){
+                console.log("exist");
+                wantedCourierId = couriers[i].id;
+                //aici faci put
+                console.log(title+dropdownValue+email+"cid"+wantedCourierId);
+                break;
+                }else{
+                console.log("not exist")
+            }
+            
+        }
         }
 
         function createOptions(courierArray: Courier[]){
             console.log("createOptions")
             let opt = courierArray.map((item, i) => {
-                console.log("i"+item.courier_name);
-                    return item.courier_name;
+                console.log("i"+item.name);
+                    return item.name;
                 }
             );
             setOptions(opt);
@@ -110,6 +129,8 @@ function EditPackage(){
             // Update the document title using the browser API
             console.log("couriers:")
             getCouriers(setCouriers,createOptions);
+            setEmail(packageEmail);
+            setTitle(packageTitle);
             // console.log("resp" + resp);
             // setMyPackages(resp);
             // console.log("couriers are:"+couriers)
@@ -121,14 +142,14 @@ function EditPackage(){
             <ToastContainer />
             <div className="packageDetailsBox">
                 <h2 id="pageTitle">Edit package details:</h2>
-                <input id="packageTitleInput" type="text" placeholder={packageName} onChange={handleTitleChange} ></input>
-                <input id="packageEmail" type="text" placeholder="Receiver e-mail" onChange={handleEmailChange}></input>
+                <input id="packageTitleInput" type="text" placeholder={packageTitle} onChange={handleTitleChange} ></input>
+                <input id="packageEmail" type="text" placeholder={packageEmail} onChange={handleEmailChange}></input>
                 {/* <input id="packageCourierInput" type="text" placeholder="Courier"  onChange={handleCourierChange}></input> */}
                 <div id="packageCourierInput">
                 <Dropdown
                     placeholder="Select a courier"
                     options={options}
-                    value={courierName}
+                    value={options[0]}
                     onChange={(value) => dropDownValueChanges(value.value)}
                     onSelect={(value) => console.log('selected!', value)} // always fires once a selection happens even if there is no change
                     onClose={(closedBySelection) => console.log('closedBySelection?:', closedBySelection)}

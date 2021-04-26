@@ -11,8 +11,8 @@
 }
 
 .packageNr{
-    text-align: center;
     width: 10%;
+    text-align: center;
     border-radius: 10px;
     line-height: 80px;
     text-align: center;
@@ -30,12 +30,28 @@
 }
 
 .packageTitle{
-    width: 62%;
+    width: 32%;
     border-radius: 10px;
     line-height: 80px;
     padding-left: 10px;
     padding-right: 10px;
     /* text-align: center; */
+}
+
+.packageEmail{
+    width: 20%;
+    border-radius: 10px;
+    line-height: 80px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.packageState{
+    width: 10%;
+    border-radius: 10px;
+    line-height: 80px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .buttonEdit {
