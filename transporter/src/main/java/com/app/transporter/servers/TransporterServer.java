@@ -1,6 +1,9 @@
 package com.app.transporter.servers;
 
 
+import static akka.http.javadsl.server.PathMatchers.integerSegment;
+import static akka.http.javadsl.server.PathMatchers.segment;
+
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -25,6 +28,7 @@ import akka.http.javadsl.model.Uri;
 import akka.http.javadsl.server.AllDirectives;
 import akka.http.javadsl.server.Route;
 import akka.http.javadsl.unmarshalling.StringUnmarshallers;
+import static com.app.transporter.db.repositories.Transfer.*;
 
 //TODO: constant the dispatcher address
 public class TransporterServer extends AllDirectives {
@@ -43,30 +47,31 @@ public class TransporterServer extends AllDirectives {
 	}
 
 	public Route routeTree() {
-		return concat(
+		return 
+		concat(
 
 				path("dbSchema", retriveAllSchema),
-				
-				path("login", login()),
+
+				path("login", LOGIN()),
 
 				get(GET()),
 
 				post(POST()),
 
-				post(DELETE()),
+				delete(DELETE()),
 
-				put(PUT())
+				put(PUT()),
 				
-				);
+				options(OPTIONS())
+
+		);
 
 	}
 	
-	//TODO:add pass in db and role
-	private Supplier<Route> login() {
+	private Supplier<Route> LOGIN() {
 		return () -> parameter("username", username ->
-        			 parameter("password", password -> { return complete("sad"); }));
+				     parameter("password", password -> login(username, password)));
 	}
-	
 	
 	private Supplier<Route> POST() {
 		return update(true);
@@ -76,16 +81,13 @@ public class TransporterServer extends AllDirectives {
 		return update(false);
 	}
 	
-	private Supplier<Route> update(boolean statusMessage) {
-		return () -> concat(
-				path("auth",() -> entity(CourierRepository.unmarshaller, register(statusMessage))),
-				path("packages",() -> entity(PackageRepository.unmarshaller, savePackage(statusMessage)))
-				);
+	private Supplier<Route> OPTIONS() {
+		return update(true);
 	}
 	
 	
-	private Supplier<Route> DELETE() {
-		return null;
+	private Supplier<Route> DELETE() { 
+		return () -> path(segment("packages").slash(integerSegment()), deletePackage(true));	
 	}
 	
 	private Supplier<Route> GET() {
@@ -96,9 +98,41 @@ public class TransporterServer extends AllDirectives {
 				path("couriers", getCouriers)
 				);
 	}
-
+	
+	private Supplier<Route> update(boolean statusMessage) {
+		return () -> concat(path("auth", () -> entity(CourierRepository.unmarshaller, register(statusMessage))),
+				path("packages",
+						() -> parameter("title",
+								title -> parameter("cid", 
+								cid -> parameter("email", 
+								email -> parameter("state",
+							    state -> savePackage(statusMessage,
+												new Package(null, title, Integer.parseInt(cid), email, state))))))),
+				path(segment("packages").slash(integerSegment()), deletePackage(statusMessage)),
+				path("editpackages",
+						() -> parameter("id", id -> parameter("title",
+								title -> parameter("cid", 
+								cid -> parameter("email", 
+								email -> parameter("state",
+							    state -> editPackage(statusMessage,
+												new Package(Integer.parseInt(id), title, Integer.parseInt(cid), email, state))))))))
+				);
+	}
+	
+	
 	
 	// Couriers
+	private Route login(String username, String password) {
+		TMessage message = new TMessage(serverInfo.getDomainAddress(), "", false);
+		Courier courier = courierRepo.searchByUsernameAndPassword(username, password).orElse(null);
+		if (courier != null) {
+			message.body = SUCCESS;
+		} else {
+			message.body = FAILURE;
+		}
+		return complete(StatusCodes.OK, message, Jackson.marshaller());
+	}
+	
 	private Function<Courier, Route> register(boolean updateStatus) {
 		return courier -> {
 			courierRepo.save(courier);
@@ -107,8 +141,9 @@ public class TransporterServer extends AllDirectives {
 		};
 	}
 	
+	//TODO: create a separate method for courierRepo.toList
 	private Supplier<Route> getCouriers = () -> {
-		String couriers = courierRepo.extractAllRowsToJSON();
+		String couriers = courierRepo.listToJSON(courierRepo.findJustCouriers());
 		TMessage tm = new TMessage(serverInfo.getDomainAddress(), couriers, false);
 		return complete(StatusCodes.OK, tm, Jackson.<TMessage>marshaller());
 	};
@@ -121,12 +156,16 @@ public class TransporterServer extends AllDirectives {
 	
 	
 	// Packages
-	private Function<Package, Route> savePackage(boolean updateStatus) {
-		return pack -> {
+	private Route savePackage(boolean updateStatus, Package pack) {
 			packageRepo.save(pack);
-			TMessage message = new TMessage(serverInfo.getDomainAddress(), packageRepo.toJSON(pack), updateStatus);
+			TMessage message = new TMessage(serverInfo.getDomainAddress(), SUCCESS, updateStatus);
 			return complete(StatusCodes.OK, message, Jackson.marshaller());
-		};
+	}
+	
+	private Route editPackage(boolean updateStatus, Package pack) {
+		packageRepo.edit(pack);
+		TMessage message = new TMessage(serverInfo.getDomainAddress(), SUCCESS, updateStatus);
+		return complete(StatusCodes.OK, message, Jackson.marshaller());
 	}
 	
 	private Supplier<Route> getPackages = () -> {
@@ -141,6 +180,14 @@ public class TransporterServer extends AllDirectives {
 		TMessage message = new TMessage(serverInfo.getDomainAddress(), packageRepo.toJSON(pack), false);
 		return complete(StatusCodes.OK, message, Jackson.marshaller());
 	});
+	
+	private Function<Integer, Route> deletePackage(boolean statusMessage) {
+		return id -> {
+			packageRepo.delete(id);
+			TMessage message = new TMessage(serverInfo.getDomainAddress(), SUCCESS, statusMessage);
+			return complete(StatusCodes.OK, message, Jackson.marshaller());
+		};
+	}
 	
 	//Server registration
 	private Consumer<TMessage> syncServer() {

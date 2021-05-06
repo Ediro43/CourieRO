@@ -78,4 +78,5 @@ public abstract class Repository<T> implements Transfer<T> {
 	abstract Optional<? extends T> searchById(Integer id);
 	
 	abstract String save(T t);
+	
 }
