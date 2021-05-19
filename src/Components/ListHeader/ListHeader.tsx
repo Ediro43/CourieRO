@@ -5,7 +5,7 @@ function ListHeader(){
     return (
         <div className="listHeader">
             <div className="listHeaderPackageNumber">
-                <span><b>ID</b></span>
+                <span><b>Nr</b></span>
             </div>
             <div className="listHeaderCourierName">
                 <span><b>Courier</b></span>

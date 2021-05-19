@@ -1,21 +1,36 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useHistory } from "react-router-dom";
 import React from 'react';
-import './Navbar.css';
+import './LoggedInNavbar.css';
 import logo from '../../Assets/logo.svg';
 
-function Navbar(){
+function Navbar(props: any){
 
   const history = useHistory();
 
   const changeToLogin = () => {
-    let path = 'login';
+    let path = '';
+    console.log("log out")
+    localStorage.setItem('User', "not");
     history.push(path);
   }
 
   const changeToWelcome = () => {
     let path = '';
+    // history.push(path);
+    // localStorage.clear();
+        window.location.href = '/';
+  }
+
+  function logout(){
+    localStorage.clear();
+    let path = '';
     history.push(path);
+    props.lgout();
+    console.log("ready to out");
+    // let path = '';
+    // history.push(path);
+
   }
 
     return(
@@ -33,8 +48,10 @@ function Navbar(){
             
           </ul>
           <form className="d-flex">
+            <a className="nav-link active navbarLinks" aria-current="page" href="/packages">All packages</a>
+            <a className="nav-link active navbarLinks" aria-current="page" href="/addpackage">Add package</a>
             <a className="nav-link active navbarLinks" aria-current="page" href="/contactus">Contact us</a>
-            <button type="button" className="btnMargin btn btn-outline-light fontclass" onClick={changeToLogin} >Login</button>
+            <button type="button" className="btnMargin btn btn-outline-light fontclass" onClick={logout} >Log out</button>
           </form>
           </div>
         </div>

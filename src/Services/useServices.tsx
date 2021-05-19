@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export interface UseServices{
     readonly getPackages: () => AxiosResponse<any>;
@@ -8,14 +8,20 @@ export interface UseServices{
     readonly deletePackage: (packageId: number) => void;
     readonly useQuery: () => URLSearchParams;
     readonly getCouriers: (func: any,createOptions:any) => AxiosResponse<any>;
+    readonly editPackage: (username: string, password: string, latitude: number, longitude: number ,goodfunc: any, badfunc: any) => void;
+    readonly login: (username: string, password: string,goodfunc: any, badfunc: any) => void;
     prevState: null;
 }
 
-// const packagesURL = "http://localhost:3000/packages";
-// const base = "http://aa7212262192.ngrok.io/"
-const base = "http://localhost:3000/";
+
+
+const base = "http://cd115fabfecd.ngrok.io/"
+// const base = "http://localhost:3000/";
 const packagesURL = base + "packages";
 const couriersURL = base + "couriers";
+const editPackagesURL = base + "editpackages";
+const loginURL = base + "login";
+
 
 const headers = {
   'Content-Type': 'text/plain'
@@ -28,6 +34,10 @@ const hdr = {
 
 export const useServices = () => {
     var resp: any;
+
+    const history = useHistory();
+
+
     async function getPackages(func: any){
         let rzt = axios.get(packagesURL)
             .then(res => {
@@ -41,9 +51,10 @@ export const useServices = () => {
 
     async function postPackage(packageTitle: string,courierID: number,email: string,goodfunc: any,noparamsfunc:any, badfunc: any){
       if(packageTitle !== "" && courierID !== -1){
-        axios.post(packagesURL, null,  {params: {
-            "cid": courierID,
+        axios.post(packagesURL, null,  {
+          params: {
             "title": packageTitle,
+            "cid": courierID,
             "email": email,
             "state": "pending"
           }})
@@ -54,6 +65,7 @@ export const useServices = () => {
             console.log(error);
             badfunc();
           });}
+
       //   const requestOptions = {
       //     mode: 'no-cors',
       //     method: 'POST',
@@ -75,7 +87,6 @@ export const useServices = () => {
       //       },
       //       body: JSON.stringify(
       //         {
-      //           "id": 25,
       //           "cid": 1,
       //           "title": "hardcoded title",
       //           "email": "e@yahoo.com",
@@ -89,10 +100,14 @@ export const useServices = () => {
     }
 
     async function deletePackage(packageId: number, refreshListFunc: any, goodfunc: any, badfunc: any){
-        axios.delete(
-          packagesURL + "/" + packageId
-        )
-        .then((response) => {
+
+      const requestOptions = {
+        method: 'DELETE'
+      };
+
+      fetch(packagesURL + "/"+ packageId, requestOptions).then((response) => {
+        return response.json();
+      }).then((response) => {
           console.log(response);
           goodfunc();
           refreshListFunc();
@@ -101,6 +116,66 @@ export const useServices = () => {
           badfunc();
         });
       
+    }
+
+
+
+
+
+    async function editPackage(packageId: number, packageTitle:string, courierID: number,email: string,goodfunc: any, badfunc:any){
+      // sa fie metoda post la /editpackages
+      // 
+
+      //query params
+      // id: unIdPacket care il dau de la ListItem
+      // "title": packageTitle,
+      //       "cid": courierID,
+      //       "email": email,
+      //       "state": "pending"
+      axios.post(editPackagesURL, null,  {
+        params: {
+          "id": packageId,
+          "title": packageTitle,
+          "cid": courierID,
+          "email": email,
+          "state": "pending"
+        }})
+        .then((response) => {
+          console.log(response);
+          goodfunc();
+        }, (error) => {
+          console.log(error);
+          badfunc();
+        });
+    }
+
+    async function login(username: string, password: string, latitude: number, longitude: number ,goodfunc: any, badfunc: any, loginfunc: any){
+      console.log(latitude +    "    " + longitude)
+      // localStorage.setItem('User', "loggedin");
+      
+      axios.post(loginURL, null,  {
+        params: {
+          "username": username,
+          "password": password,
+          "latitude": latitude,
+          "longitude": longitude
+
+        }})
+        .then((response) => {
+          console.log(response);
+          let result = response.data;
+          if(result.status === "failure"){
+            badfunc();
+          }else{
+            goodfunc();
+            localStorage.setItem('User', "loggedin");
+            loginfunc();
+            history.push("/");
+          }
+        }, (error) => {
+          console.log(error);
+          badfunc();
+        });
     }
 
     function useQuery() {
@@ -124,8 +199,10 @@ export const useServices = () => {
         getPackages,
         postPackage,
         deletePackage,
+        editPackage,
         useQuery,
         getCouriers,
+        login
     };
 }
 

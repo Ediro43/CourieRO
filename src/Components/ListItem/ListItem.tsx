@@ -17,8 +17,8 @@ function ListItem(props: any){
 
 
     const changeToEditPackage = () => {
-        let path = 'editpackage/' ;
-        history.push(path + '?courier=' + props.courier_name +"&title="+props.packageTitle+"&email="+props.email);
+        let path = 'editpackages/' ;
+        history.push(path + '?courier=' + props.courier_name + "&id=" + props.packageId + "&title="+props.packageTitle+"&email="+props.email);
         // history.push(
         //     {
         //         pathname: '/editpackage',

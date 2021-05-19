@@ -12,7 +12,7 @@ interface Courier{
 
 function EditPackage(){
 
-    const { useQuery } = useServices();
+    const { useQuery, editPackage  } = useServices();
 
     let query = useQuery();
 
@@ -24,6 +24,9 @@ function EditPackage(){
 
     let myemail = query.get("email");
     let packageEmail: string = myemail ? myemail : "";
+
+    let myid = query.get("id");
+    let packageId: number = Number(myid) ? Number(myid) : -1;
 
     console.log("from url" + query.get("query"));
 
@@ -59,7 +62,7 @@ function EditPackage(){
         }
     
         function showGoodAlert(){
-            toast.success('Successfuly added a package!', {
+            toast.success('Successfuly modified package!', {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -106,7 +109,13 @@ function EditPackage(){
                 console.log("exist");
                 wantedCourierId = couriers[i].id;
                 //aici faci put
-                console.log(title+dropdownValue+email+"cid"+wantedCourierId);
+                editPackage(packageId,title,wantedCourierId,email,showGoodAlert,showBadAlert);
+                console.log(
+                    "package "+packageId,
+                    "title "+title,
+                    "dropdown "+dropdownValue,
+                    "email "+email,
+                    "cid"+wantedCourierId);
                 break;
                 }else{
                 console.log("not exist")
