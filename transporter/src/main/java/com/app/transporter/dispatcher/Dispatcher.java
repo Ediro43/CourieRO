@@ -1,8 +1,12 @@
 package com.app.transporter.dispatcher;
 
+import static java.lang.Long.parseLong;
+import static java.lang.Double.parseDouble;
 import static java.util.concurrent.CompletableFuture.runAsync;
 import static java.util.stream.Collectors.toList;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
@@ -20,9 +24,9 @@ import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.model.Query;
 import akka.http.javadsl.model.Uri;
+import akka.http.javadsl.model.headers.RawHeader;
 import akka.http.javadsl.server.AllDirectives;
 import akka.japi.function.Function;
-
 
 /**
  * <h2>Requests controller responsibilities:</h2>
@@ -46,6 +50,9 @@ public class Dispatcher extends AllDirectives {
 	
 	//        'host:port' -> serverInfo
 	private Map<String, ServerInfo> availableServers = new LinkedHashMap<>();
+	
+	//        'device.hashcode' -> serverInfo
+	private Map<Integer, ServerInfo> clientToServerCache = new HashMap<>();
 
 	public Dispatcher(ActorSystem<Void> system) {
 		this.system = system;
@@ -65,20 +72,22 @@ public class Dispatcher extends AllDirectives {
 			String attributes = uri.query().toString();
 			String query = !attributes.isEmpty() ? "?" + attributes : "";
 			String queryPath = uri.getPathString() + query;
-
-			// Server registration request
+			
+			// Server registration request to dispatcher.
 			if (queryPath.contains("/register")) {
 				cacheServer(uri);
 
-				// Create full synchronization of the DB for the new server
+				// Create full synchronization of the DB for the new server.
 				if (availableServers.size() > 1) {
 					return syncAllDataForTheNewServer();
 				}
 				return null;
 			}
 
-			//Copy request from the original with the new server address
-			final ServerInfo closestServer = getNearestServer();
+			//Find the nearest server based on the request-device location.
+			final ServerInfo closestServer = getNearestServer(request);
+
+			//Copy request from the original with the new server address.
 			final String link = closestServer.getRequestLink(queryPath);
 			HttpRequest requestToServer = HttpRequest.create(link)
 					.withHeaders(request.getHeaders())
@@ -124,7 +133,7 @@ public class Dispatcher extends AllDirectives {
 	}
 	
 	/**
-	 * After receiving the JSON response from the nearest server return the 'body - response' to the client.
+	 * After receiving the JSON response from the nearest server return the 'body - response' to the client. The response has to provide <b>CORS</b> headers in order to pass browser filters.
 	 * <BR>In parallel (asynchronous) the rest of the available servers gets synchronized. 
 	 * @param oldRequest
 	 * @param closestServer
@@ -133,7 +142,13 @@ public class Dispatcher extends AllDirectives {
 	private java.util.function.Function<TMessage,HttpResponse> manageResponse(HttpRequest oldRequest, ServerInfo closestServer){
 		return  messesage -> {
 			runAsync(() -> synchronizeServers(messesage, oldRequest, closestServer));
-			return HttpResponse.create().withEntity(ContentTypes.APPLICATION_JSON, messesage.body);
+			RawHeader create =  RawHeader.create("Access-Control-Allow-Origin", "http://localhost:3000");
+			RawHeader create2 = RawHeader.create("Access-Control-Allow-Credentials",  "true");
+			RawHeader create3 = RawHeader.create("Access-Control-Max-Age",  "1800");
+			RawHeader create5 = RawHeader.create("Access-Control-Allow-Methods",  "PUT, POST, GET, DELETE, PATCH, OPTIONS");
+			RawHeader create6 = RawHeader.create("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+
+			return HttpResponse.create().withHeaders(Arrays.asList(create,create2,create3,create5,create6)).withEntity(ContentTypes.APPLICATION_JSON, messesage.body);
 		};
 	}
 	
@@ -146,7 +161,7 @@ public class Dispatcher extends AllDirectives {
 				
 				//create PUT requests for the servers - alternatively POST can be used
 				for (var server : restOfServers) {
-					String queryPath = oldRequest.getUri().getPathString();
+					String queryPath = getQueryPath(oldRequest);
 					String link = server.getRequestLink(queryPath);
 					HttpRequest requestToServer = HttpRequest
 							.PUT(link)
@@ -157,11 +172,48 @@ public class Dispatcher extends AllDirectives {
 			}
 	}
 
-	//TODO: cache maybe the client and also the location
-	//TODO: this is wrong for not just extract the first server
-	//TODO: create a method or something some formula ffs my life
-	//TODO: check here the request for longitude and latitude ' ' '
-	private ServerInfo getNearestServer() {
+	
+	/**
+	 * TODO: For now just the login requests contains the Latitude/Longitude. In future each request might include the Latitude/Longitude.
+	 * For /login requests map the device to the nearest server.
+	 * <br>For the rest of the requests get the server directly from map.
+	 * <br>An exception request-creator like Post-man will get the first server available since there is no device information.(No User-Agent header)
+	 * @param request
+	 * @return nearest server
+	 */
+	private ServerInfo getNearestServer(HttpRequest request) {
+		String queryPath = getQueryPath(request);
+		String deviceInfo = request.getHeader("User-Agent")
+				.orElse(RawHeader.create("default", "default")).toString();
+		if (queryPath.contains("/login")) {
+			Query uriQuery = request.getUri().query();
+			Double latitude = parseDouble(uriQuery.getOrElse("latitude", "0"));
+			Double longitude = parseDouble(uriQuery.getOrElse("longitude", "0"));
+
+			var servers = availableServers.values().stream().collect(toList());
+			int pos = 0;
+			double minDistance = Double.MAX_VALUE;
+			for (int i = 0; i < servers.size(); i++) {
+				var server = servers.get(i);
+				double distance = distance(server.latitude, server.longitude, latitude, longitude);
+				if (distance < minDistance) {
+					minDistance = distance;
+					pos = i;
+				}
+			}
+			
+			//map a device to nearest server: device -> serverInfo
+			var nearestServer = servers.get(pos);
+			clientToServerCache.put(deviceInfo.hashCode(), nearestServer);
+			return nearestServer;
+		}
+		
+		//for non-login request get the server from map
+		int deviceCode = deviceInfo.hashCode();
+		if (clientToServerCache.containsKey(deviceCode)) {
+			return clientToServerCache.get(deviceCode);
+		}
+		
 		return availableServers.values().stream().findFirst().get();
 	}
 	
@@ -171,14 +223,22 @@ public class Dispatcher extends AllDirectives {
 		String port = query.getOrElse("port", "");
 		String address = host + ":" + port;
 		if (!availableServers.containsKey(address)) {
-			Long longitude = Long.parseLong(query.getOrElse("longitude", "0"));
-			Long latitude = Long.parseLong(query.getOrElse("latitude", "0"));
-			ServerInfo server = new ServerInfo(host, port, longitude, latitude);
+			Long longitude = parseLong(query.getOrElse("longitude", "0"));
+			Long latitude = parseLong(query.getOrElse("latitude", "0"));
+			ServerInfo server = new ServerInfo(host, port, latitude, longitude);
 			availableServers.put(address, server);
 		}
 	}
 	
-	private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
+	
+	private static String getQueryPath(HttpRequest request) {
+		Uri uri = request.getUri();
+		String attributes = uri.query().toString();
+		String query = !attributes.isEmpty() ? "?" + attributes : "";
+		return uri.getPathString() + query;
+	}
+	
+	private static double distance(double lat1, double lon1, double lat2, double lon2) {
 		if ((lat1 == lat2) && (lon1 == lon2)) {
 			return 0;
 		} else {

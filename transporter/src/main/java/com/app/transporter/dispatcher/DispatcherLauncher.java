@@ -13,7 +13,7 @@ public class DispatcherLauncher {
 	public static ActorSystem<Void> system;
 
 	public static void main(String[] args) throws Exception {
-		
+
 		system = ActorSystem.create(Behaviors.empty(), "routes");
 		final Http http = Http.get(system);
 		Dispatcher dispatcher = new Dispatcher(system);

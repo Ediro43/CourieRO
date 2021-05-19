@@ -5,6 +5,8 @@ import java.util.List;
 public interface Transfer<T> {
 
 	public final static String EMPTY_JSON = "{ }";
+	public final static String SUCCESS = "{\"status\":\"success\"}";
+	public final static String FAILURE = "{\"status\":\"failure\"}";
 
 	String toJSON(T t);
 	
