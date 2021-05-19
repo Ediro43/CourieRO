@@ -53,6 +53,9 @@ public abstract class Repository<T> implements Transfer<T> {
 	
 	@Override
 	public String toJSON(T object) {
+		if(object == null) {
+			return EMPTY_JSON;
+		}
 		try {
 			return objectMapper.writeValueAsString(object);
 		} catch (JsonProcessingException e) {
@@ -63,6 +66,9 @@ public abstract class Repository<T> implements Transfer<T> {
 	
 	@Override
 	public String listToJSON(List<? extends T> list) {
+		if(list == null || list.isEmpty()) {
+			return EMPTY_JSON;
+		}
 		try {
 			return objectMapper.writeValueAsString(list);
 		} catch (JsonProcessingException e) {

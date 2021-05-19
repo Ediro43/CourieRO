@@ -45,7 +45,7 @@ public class TransporterServer extends AllDirectives {
 		this.system = system;
 		this.serverInfo = serverInfo;
 	}
-
+	
 	public Route routeTree() {
 		return 
 		concat(
@@ -92,15 +92,23 @@ public class TransporterServer extends AllDirectives {
 	
 	private Supplier<Route> GET() {
 		return () -> concat(
-				path("packages", getPackageByID),
-				path("packages", getPackages),
-				path("couriers", getCourierByID),
-				path("couriers", getCouriers)
+				path("packages", 	getPackageByID),
+				path("packages", 	getAllPackagesOfACourier),
+				path("packages", 	getPackages),
+				path("viewpackage", getPackageByID),
+				path("couriers", 	getCourierByID),
+				path("couriers", 	getCouriers)
 				);
 	}
 	
 	private Supplier<Route> update(boolean statusMessage) {
 		return () -> concat(path("auth", () -> entity(CourierRepository.unmarshaller, register(statusMessage))),
+				
+				
+				path("changestate", 
+						() -> parameter("id", id -> 
+							  parameter("state", state -> editStateOfPackage(Integer.parseInt(id), state, statusMessage)))),
+				
 				path("packages",
 						() -> parameter("title",
 								title -> parameter("cid", 
@@ -108,7 +116,9 @@ public class TransporterServer extends AllDirectives {
 								email -> parameter("state",
 							    state -> savePackage(statusMessage,
 												new Package(null, title, Integer.parseInt(cid), email, state))))))),
+				
 				path(segment("packages").slash(integerSegment()), deletePackage(statusMessage)),
+				
 				path("editpackages",
 						() -> parameter("id", id -> parameter("title",
 								title -> parameter("cid", 
@@ -126,7 +136,7 @@ public class TransporterServer extends AllDirectives {
 		TMessage message = new TMessage(serverInfo.getDomainAddress(), "", false);
 		Courier courier = courierRepo.searchByUsernameAndPassword(username, password).orElse(null);
 		if (courier != null) {
-			message.body = SUCCESS;
+			message.body = courierRepo.toJSON(courier);
 		} else {
 			message.body = FAILURE;
 		}
@@ -141,9 +151,8 @@ public class TransporterServer extends AllDirectives {
 		};
 	}
 	
-	//TODO: create a separate method for courierRepo.toList
 	private Supplier<Route> getCouriers = () -> {
-		String couriers = courierRepo.listToJSON(courierRepo.findJustCouriers());
+		String couriers = courierRepo.findJustCouriers();
 		TMessage tm = new TMessage(serverInfo.getDomainAddress(), couriers, false);
 		return complete(StatusCodes.OK, tm, Jackson.<TMessage>marshaller());
 	};
@@ -168,16 +177,27 @@ public class TransporterServer extends AllDirectives {
 		return complete(StatusCodes.OK, message, Jackson.marshaller());
 	}
 	
+	private Route editStateOfPackage(Integer id, String state, boolean updateStatus) {
+		packageRepo.editStateOfThePackage(id, state);
+		TMessage message = new TMessage(serverInfo.getDomainAddress(), SUCCESS, updateStatus);
+		return complete(StatusCodes.OK, message, Jackson.marshaller());
+	}
+	
 	private Supplier<Route> getPackages = () -> {
 		String packages = packageRepo.getCustomInfoAboutPackages();
 		TMessage tm = new TMessage(serverInfo.getDomainAddress(), packages, false);
 		return complete(StatusCodes.OK, tm, Jackson.<TMessage>marshaller());
 	};
 	
-	
 	private Supplier<Route> getPackageByID = () -> parameter("id", id -> {
 		var pack = packageRepo.searchById(Integer.parseInt(id)).get();
 		TMessage message = new TMessage(serverInfo.getDomainAddress(), packageRepo.toJSON(pack), false);
+		return complete(StatusCodes.OK, message, Jackson.marshaller());
+	});
+	
+	private Supplier<Route> getAllPackagesOfACourier = () -> parameter("cid", cid -> {
+		var packages = packageRepo.findAllPackagesOfAGivenCourier(Integer.parseInt(cid));
+		TMessage message = new TMessage(serverInfo.getDomainAddress(), packages, false);
 		return complete(StatusCodes.OK, message, Jackson.marshaller());
 	});
 	

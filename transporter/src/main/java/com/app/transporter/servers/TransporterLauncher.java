@@ -20,7 +20,7 @@ public class TransporterLauncher extends AllDirectives {
 
 
 	public static void main(String[] args) throws Exception {
-		final Database db = Database.forUrlAndCredentials("jdbc:mysql://localhost:3306/firstdb", "abcuser", "abcpassword");
+		final Database db = Database.forUrlAndCredentials("jdbc:mysql://localhost:3306/firstdb", "root", "root");
 		Injector injector = Guice.createInjector(new DBBinder(db));
 		ActorSystem<Void> system = ActorSystem.create(Behaviors.empty(), "routes");
 		final Http http = Http.get(system);

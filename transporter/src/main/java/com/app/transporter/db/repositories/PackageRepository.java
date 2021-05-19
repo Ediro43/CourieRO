@@ -33,29 +33,37 @@ public class PackageRepository extends Repository<Package>{
 
 	@Override
 	public List<? extends Package> findAll() {
-		//TODO: retrieve all packages
-		return null;
+		return getDataBase().findAll(Package.class, "select * from package");
+	}
+	
+	public String findAllPackagesOfAGivenCourier(Integer cid) {
+		var packages = getDataBase().findAll(Package.class, "select * from package where cid = ?", cid);
+		return listToJSON(packages);
 	}
 
 	@Override
 	public Optional<? extends Package> searchById(Integer id) {
-		//TODO: self explanatory
-		return null;
+		return getDataBase().findOptional(Package.class, "select * from package where id = ?", id);
 	}
 	
 	@Override
 	public String save(Package pack) {
-		//TODO: save package to db
+		getDataBase().update("insert into package (title, cid, email, state) values (?, ?, ?, ?)", pack.title, pack.cid, pack.email, pack.state);
 		return "Succes";
 	}
 	
 	public String edit(Package pack) {
-		//TODO: modify a pack
+		getDataBase().update("update package set title = ?, cid = ?, email = ?, state = ? where id = ?", pack.title, pack.cid, pack.email, pack.state, pack.id);
+		return "Succes";
+	}
+	
+	public String editStateOfThePackage(Integer id, String state) {
+		getDataBase().update("update package set state = ? where id = ?", state, id);
 		return "Succes";
 	}
 	
 	public void delete(Integer id) {
-		//TODO: delete a package
+		getDataBase().update("delete from package where id = ?", id);
 	}
 	
 

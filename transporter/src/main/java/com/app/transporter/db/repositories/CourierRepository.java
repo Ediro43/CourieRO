@@ -33,25 +33,23 @@ public class CourierRepository extends Repository<Courier> {
 		return getDataBase().findAll(Courier.class, "select * from courier");
 	}
 	
-	public List<? extends Courier> findJustCouriers() {
-		//TODO: just courier role from the db
-		return null;
+	public String findJustCouriers() {
+		return listToJSON(getDataBase().findAll(Courier.class, "select * from courier where role = ?","courier"));
 	}
 
 	@Override
 	public Optional<? extends Courier> searchById(Integer id) {
-		//TODO: search by id the courier
-		return null;
+		return getDataBase().findOptional(Courier.class, "select * from courier where id = ?", id);
 	}
 	
 	public Optional<? extends Courier> searchByUsernameAndPassword(String name, String password) {
-		//TODO: as above but by name and password
-		return null;
+		Optional<Courier> op = getDataBase().findOptional(Courier.class, "select * from courier where name = ? and password = ?", name, password);
+		return op;
 	}
 
 	@Override
 	public String save(Courier courier) {
-		//TODO: insert the courier into db: check dalesbred docu: use this getDataBase().update();
+		getDataBase().update("insert into courier (name, password, role) values (?, ?, ?)", courier.name, courier.password, courier.role);
 		return "Succes";
 	}
 	

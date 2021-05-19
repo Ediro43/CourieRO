@@ -14,7 +14,7 @@ import akka.http.javadsl.Http;
 public class TransporterLauncher2 {
 
 	public static void main(String[] args) throws Exception {
-		final Database db = Database.forUrlAndCredentials("jdbc:mysql://localhost:3306/seconddb", "abcuser", "abcpassword");
+		final Database db = Database.forUrlAndCredentials("jdbc:mysql://localhost:3306/seconddb", "root", "root");
 		Injector injector = Guice.createInjector(new DBBinder(db));
 		ActorSystem<Void> system = ActorSystem.create(Behaviors.empty(), "routes");
 		final Http http = Http.get(system);
