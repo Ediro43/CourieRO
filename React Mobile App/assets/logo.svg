@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="80px" viewBox="0 0 80 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>logo</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="logo">
+            <circle id="Oval" fill="#FFFFFF" cx="40" cy="40" r="40"></circle>
+            <g id="box" transform="translate(13.333333, 20.266667)">
+                <polygon id="Path" fill="#EFA912" points="25.2855246 39.2521739 24.6480744 39.1878261 0 36.6782609 0 5.14782609 30.1726428 -5.68434189e-14 52.0584329 2.57391304 52.0648074 2.71333333 52.0669323 2.78197101 53.3333333 33.4608696"></polygon>
+                <polygon id="Path" fill="#000000" opacity="0.1" points="25.2855246 39.3272464 24.6480744 39.2628986 24.6480744 6.93884058 52.0648074 2.7884058 53.3333333 33.535942"></polygon>
+                <polygon id="Path" fill="#000000" opacity="0.05" points="52.0669323 2.78197101 52.0584329 2.7884058 24.6480744 6.86376812 -1.42108547e-14 5.14782609 30.1726428 0 52.0584329 2.57391304 52.0648074 2.71333333"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

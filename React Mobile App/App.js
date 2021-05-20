@@ -3,28 +3,36 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { CreateAccountScreen } from './src/screens/CreateAccountScreen';
-import { DeliveryScreen } from './src/screens/DeliveryScreen';
-import { SignInScreen } from './src/screens/SignInScreen';
-import { WelcomeScreen } from './src/screens/WelcomeScreen';
-import { YourPackageScreen } from './src/screens/YourPackageScreen';
+import { DeliveryScreen } from './src/screens/DeliveryScreen/DeliveryScreen';
+import { SignInScreen } from './src/screens/SignInScreen/SignInScreen';
+import { WelcomeScreen } from './src/screens/WelcomeScreen/WelcomeScreen';
+import { YourPackageScreen } from './src/screens/YourPackageScreen/YourPackageScreen';
+import { InsertCodeScreen } from './src/screens/InsertCodeScreen/InsertCodeScreen';
+import { ChangePackageStateScreen } from './src/screens/ChangePackageStateScreen/ChangePackageStateScreen';
+import { LogBox } from 'react-native';
 
 const AuthStack = createStackNavigator();
-
-export default () => {
+LogBox.ignoreAllLogs();
+export default () => (
   <NavigationContainer>
-    <AuthStack.Navigator>
+    <AuthStack.Navigator
+      screenOptions={{ headerShown: false, animationEnabled: false }}
+    >
+      <AuthStack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+      <AuthStack.Screen name="SignIn" component={SignInScreen} />
       <AuthStack.Screen
-        name="SignIn"
-        component={SignInScreen}
-      ></AuthStack.Screen>
+        name="YourPackageScreen"
+        component={YourPackageScreen}
+      />
+      <AuthStack.Screen name="DeliveryScreen" component={DeliveryScreen} />
+      <AuthStack.Screen name="InsertCode" component={InsertCodeScreen} />
       <AuthStack.Screen
-        name="Register"
-        component={CreateAccountScreen}
-      ></AuthStack.Screen>
+        name="ChangePackageState"
+        component={ChangePackageStateScreen}
+      />
     </AuthStack.Navigator>
-  </NavigationContainer>;
-};
+  </NavigationContainer>
+);
 
 const styles = StyleSheet.create({
   container: {
